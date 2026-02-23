@@ -26,6 +26,11 @@ public class APIClient {
     private final APIRequestContext requestContext;
     private final String baseUrl;
 
+    /**
+     * Creates an {@code APIClient} backed by the given Playwright request context.
+     *
+     * @param requestContext the Playwright {@link APIRequestContext} to use for HTTP calls
+     */
     public APIClient(APIRequestContext requestContext) {
         this.requestContext = requestContext;
         this.baseUrl = ConfigManager.getInstance().getBaseUrl();
@@ -131,6 +136,14 @@ public class APIClient {
     // Internal helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * Resolves the full URL for a request. If the endpoint is already an absolute
+     * URL (starting with {@code http://} or {@code https://}), it is returned as-is;
+     * otherwise the configured {@code baseUrl} is prepended.
+     *
+     * @param request the request descriptor
+     * @return absolute URL string
+     */
     private String buildUrl(APIRequest request) {
         String endpoint = request.getEndpoint();
         if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
@@ -139,6 +152,14 @@ public class APIClient {
         return baseUrl + endpoint;
     }
 
+    /**
+     * Builds a Playwright {@link RequestOptions} object from the given request descriptor,
+     * merging default headers (e.g. {@code Content-Type: application/json}) with any
+     * request-level headers, and applying query parameters.
+     *
+     * @param request the request descriptor
+     * @return configured {@link RequestOptions} ready for use in a Playwright API call
+     */
     private RequestOptions buildOptions(APIRequest request) {
         RequestOptions options = RequestOptions.create();
 
@@ -165,6 +186,14 @@ public class APIClient {
         return options;
     }
 
+    /**
+     * Wraps a raw Playwright {@link APIResponse} into the framework's own
+     * {@link com.framework.api.models.APIResponse}, extracting the status code,
+     * status text, body, and response headers, and logging the result.
+     *
+     * @param playwrightResponse the raw response from Playwright
+     * @return a framework {@link com.framework.api.models.APIResponse} instance
+     */
     private com.framework.api.models.APIResponse wrap(APIResponse playwrightResponse) {
         int statusCode = playwrightResponse.status();
         String statusText = playwrightResponse.statusText();
@@ -177,6 +206,11 @@ public class APIClient {
         return new com.framework.api.models.APIResponse(statusCode, statusText, body, headers);
     }
 
+    /**
+     * Logs the request body at DEBUG level if it is not {@code null}.
+     *
+     * @param body the request body object to log
+     */
     private void logBody(Object body) {
         if (body != null) {
             LOG.debug("Request body: {}", JsonUtils.toPrettyJson(body));
