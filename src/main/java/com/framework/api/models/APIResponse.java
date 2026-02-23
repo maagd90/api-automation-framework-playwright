@@ -14,6 +14,14 @@ public class APIResponse {
     private final String body;
     private final java.util.Map<String, String> headers;
 
+    /**
+     * Creates an {@code APIResponse} with the given HTTP response details.
+     *
+     * @param statusCode the HTTP status code (e.g., 200, 201, 404)
+     * @param statusText the HTTP status text (e.g., "OK", "Created")
+     * @param body       the raw response body as a string
+     * @param headers    the response headers map
+     */
     public APIResponse(int statusCode, String statusText, String body, java.util.Map<String, String> headers) {
         this.statusCode = statusCode;
         this.statusText = statusText;
@@ -25,18 +33,38 @@ public class APIResponse {
     // Accessors
     // -------------------------------------------------------------------------
 
+    /**
+     * Returns the HTTP status code of the response (e.g., 200, 404).
+     *
+     * @return HTTP status code
+     */
     public int getStatusCode() {
         return statusCode;
     }
 
+    /**
+     * Returns the HTTP status text of the response (e.g., "OK", "Not Found").
+     *
+     * @return HTTP status text
+     */
     public String getStatusText() {
         return statusText;
     }
 
+    /**
+     * Returns the raw response body as a string.
+     *
+     * @return response body string
+     */
     public String getBody() {
         return body;
     }
 
+    /**
+     * Returns the HTTP response headers as a name-to-value map.
+     *
+     * @return response headers map
+     */
     public java.util.Map<String, String> getHeaders() {
         return headers;
     }
