@@ -26,12 +26,6 @@ public final class ConfigManager {
         loadProperties();
     }
 
-    /**
-     * Returns the singleton {@code ConfigManager} instance, creating it on the
-     * first call.
-     *
-     * @return the singleton {@code ConfigManager}
-     */
     public static synchronized ConfigManager getInstance() {
         if (instance == null) {
             instance = new ConfigManager();
